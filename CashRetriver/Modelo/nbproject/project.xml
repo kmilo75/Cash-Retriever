@@ -5,17 +5,15 @@
         <data xmlns="http://www.netbeans.org/ns/nb-module-project/3">
             <code-name-base>co.com.beanslab.cashretriver.modelo</code-name-base>
             <suite-component/>
-            <module-dependencies>
-                <dependency>
-                    <code-name-base>com.beanslab.cashretriver.modelo</code-name-base>
-                    <build-prerequisite/>
-                    <compile-dependency/>
-                    <run-dependency>
-                        <specification-version>1.0</specification-version>
-                    </run-dependency>
-                </dependency>
-            </module-dependencies>
-            <public-packages/>
+            <module-dependencies/>
+            <public-packages>
+                <package>modelovergara</package>
+                <package>modelovergara.bo</package>
+            </public-packages>
+            <class-path-extension>
+                <runtime-relative-path>ext/ModeloVergara.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/ModeloVergara.jar</binary-origin>
+            </class-path-extension>
         </data>
     </configuration>
 </project>

@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: co.com.beanslab.librerias
+OpenIDE-Module-Localizing-Bundle: co/com/beanslab/librerias/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
