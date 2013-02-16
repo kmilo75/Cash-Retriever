@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.co.beanslab.cashretriver.credito
+OpenIDE-Module-Localizing-Bundle: com/co/beanslab/cashretriver/credito/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

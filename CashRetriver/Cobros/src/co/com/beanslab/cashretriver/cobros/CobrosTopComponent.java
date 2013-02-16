@@ -39,7 +39,7 @@ public final class CobrosTopComponent extends TopComponent {
         setName(Bundle.CTL_CobrosTopComponent());
         setToolTipText(Bundle.HINT_CobrosTopComponent());
         AutoCompleteDecorator.decorate(cliente_jComboBox);
-//        AutoCompleteDecorator.decorate();
+        AutoCompleteDecorator.decorate(cobrador_jComboBox);
 
     }
 
@@ -70,6 +70,10 @@ public final class CobrosTopComponent extends TopComponent {
         interesPorcentual_jTextField = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         totalPrestamo_jTextField = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
 
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -77,6 +81,7 @@ public final class CobrosTopComponent extends TopComponent {
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel1.text")); // NOI18N
 
+        cobrador_jComboBox.setEditable(true);
         cobrador_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Juanito Alimaña", "Juaquin Perez", "Armando Manzanero", "Paquita La del Barrio", "Pedro Navaja" }));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel2.text")); // NOI18N
@@ -133,12 +138,13 @@ public final class CobrosTopComponent extends TopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel5.text")); // NOI18N
 
         prestamoMonto_jTextField.setText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.prestamoMonto_jTextField.text")); // NOI18N
+        prestamoMonto_jTextField.setToolTipText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.prestamoMonto_jTextField.toolTipText")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel6.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel7, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel7.text")); // NOI18N
 
-        frecuenciaInteres_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Diario", "Semanal.Quincenal", "Mensual", "Trimestral", "Semestral", "Anual" }));
+        frecuenciaInteres_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Diario", "Semanal", "Quincenal", "Mensual", "Trimestral", "Semestral", "Anual" }));
 
         interesPorcentual_jTextField.setText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.interesPorcentual_jTextField.text")); // NOI18N
         interesPorcentual_jTextField.addActionListener(new java.awt.event.ActionListener() {
@@ -151,6 +157,19 @@ public final class CobrosTopComponent extends TopComponent {
 
         totalPrestamo_jTextField.setText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.totalPrestamo_jTextField.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel9.text")); // NOI18N
+
+        jTextField1.setText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jTextField1.text")); // NOI18N
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel10, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel10.text")); // NOI18N
+
+        jTextField2.setText(org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jTextField2.text")); // NOI18N
+
         javax.swing.GroupLayout prestamo_jPanelLayout = new javax.swing.GroupLayout(prestamo_jPanel);
         prestamo_jPanel.setLayout(prestamo_jPanelLayout);
         prestamo_jPanelLayout.setHorizontalGroup(
@@ -158,15 +177,20 @@ public final class CobrosTopComponent extends TopComponent {
             .addGroup(prestamo_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(prestamo_jPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(42, 42, 42)
+                        .addComponent(totalPrestamo_jTextField))
                     .addGroup(prestamo_jPanelLayout.createSequentialGroup()
                         .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cliente_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(prestamoMonto_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cliente_jComboBox, 0, 169, Short.MAX_VALUE)
+                            .addComponent(jTextField2)
+                            .addComponent(prestamoMonto_jTextField))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -175,30 +199,38 @@ public final class CobrosTopComponent extends TopComponent {
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(frecuenciaInteres_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(totalPrestamo_jTextField))
-                .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 244, Short.MAX_VALUE))))
         );
         prestamo_jPanelLayout.setVerticalGroup(
             prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(prestamo_jPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel10)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cliente_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(prestamoMonto_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(frecuenciaInteres_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(interesPorcentual_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
                 .addGap(18, 18, 18)
+                .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(prestamoMonto_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7)
+                    .addComponent(interesPorcentual_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(frecuenciaInteres_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
                 .addGroup(prestamo_jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalPrestamo_jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         add(prestamo_jPanel);
@@ -207,6 +239,10 @@ public final class CobrosTopComponent extends TopComponent {
     private void interesPorcentual_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_interesPorcentual_jTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_interesPorcentual_jTextFieldActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField baseMonto_jTextField;
@@ -217,6 +253,7 @@ public final class CobrosTopComponent extends TopComponent {
     private javax.swing.JComboBox frecuenciaInteres_jComboBox;
     private javax.swing.JTextField interesPorcentual_jTextField;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -224,6 +261,9 @@ public final class CobrosTopComponent extends TopComponent {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField prestamoMonto_jTextField;
     private javax.swing.JPanel prestamo_jPanel;
     private javax.swing.JTextField totalPrestamo_jTextField;
