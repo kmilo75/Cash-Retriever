@@ -6,29 +6,30 @@ package com.co.beanslab.cashretriver.creditos.creditosexplorer;
 
 import java.beans.IntrospectionException;
 import java.util.List;
-import modelovergara.bo.Cobros;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 
 /**
- * Clase encargada de crear el nodo de tipo bean que representa el nodo en el mannager.
+ * Clase encargada de crear el nodo de tipo bean que representa el nodo en el
+ * mannager.
+ *
  * @author Juan Camilo Cañas Gómez
  */
-public class CobrosChildFactory extends ChildFactory<Cobros> {
+public class ElementChildFactory<T> extends ChildFactory<T> {
 
-    List<Cobros> cs;
+    List<T> result;
 
-    public CobrosChildFactory(List<Cobros> cs) {
-        this.cs = cs;
+    public ElementChildFactory(List<T> result) {
+        this.result = result;
     }
 
     @Override
-    protected boolean createKeys(List<Cobros> toPopulate) {
+    protected boolean createKeys(List<T> toPopulate) {
         try {
-            for (Cobros cobros : toPopulate) {
-                cs.add(cobros);
+            for (T cobros : toPopulate) {
+                result.add(cobros);
             }
             return true;
         } catch (Exception e) {
@@ -37,7 +38,7 @@ public class CobrosChildFactory extends ChildFactory<Cobros> {
     }
 
     @Override
-    protected Node createNodeForKey(Cobros key) {
+    protected Node createNodeForKey(T key) {
         try {
             return new BeanNode(key);
         } catch (IntrospectionException ex) {
@@ -45,6 +46,4 @@ public class CobrosChildFactory extends ChildFactory<Cobros> {
             return null;
         }
     }
-    
-    
 }

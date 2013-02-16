@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: false
 OpenIDE-Module: co.com.beanslab.cashretriver.modelo.dao
 OpenIDE-Module-Localizing-Bundle: co/com/beanslab/cashretriver/modelo/dao/Bundle.properties
 OpenIDE-Module-Specification-Version: 1.0

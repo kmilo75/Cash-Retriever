@@ -40,6 +40,7 @@ public final class CobrosTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_CobrosTopComponent());
         AutoCompleteDecorator.decorate(cliente_jComboBox);
         AutoCompleteDecorator.decorate(cobrador_jComboBox);
+        
 
     }
 

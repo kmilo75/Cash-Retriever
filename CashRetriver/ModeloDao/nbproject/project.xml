@@ -22,8 +22,20 @@
                         <specification-version>1.0</specification-version>
                     </run-dependency>
                 </dependency>
+                <dependency>
+                    <code-name-base>co.com.beanslab.librerias.mysql</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <specification-version>1.0</specification-version>
+                    </run-dependency>
+                </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>co.com.beanslab.cashretriver.modelo.dao</package>
+                <package>co.com.beanslab.cashretriver.modelo.facade</package>
+                <package>co.com.beanslab.cashretriver.modelo.facade.exceptions</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
