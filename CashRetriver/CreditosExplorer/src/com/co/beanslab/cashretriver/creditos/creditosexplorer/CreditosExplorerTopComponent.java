@@ -4,18 +4,17 @@
  */
 package com.co.beanslab.cashretriver.creditos.creditosexplorer;
 
-import co.com.beanslab.cashretriver.modelo.facade.RolesJpaController;
+import java.util.LinkedList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import modelovergara.bo.Roles;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.nodes.AbstractNode;
+import org.openide.nodes.BeanNode;
+import org.openide.nodes.ChildFactory;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
 
@@ -44,6 +43,14 @@ public final class CreditosExplorerTopComponent extends TopComponent implements 
 
     private static ExplorerManager em = new ExplorerManager();
 
+    static void refreshNode() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static void crearCobro() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public CreditosExplorerTopComponent() {
         initComponents();
         setName(Bundle.CTL_CreditosExplorerTopComponent());
@@ -64,20 +71,8 @@ public final class CreditosExplorerTopComponent extends TopComponent implements 
 
         em1 = new org.openide.explorer.view.BeanTreeView();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(em1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(em1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        add(em1);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -115,11 +110,24 @@ public final class CreditosExplorerTopComponent extends TopComponent implements 
      */
     private void cargaCreditos() {
         
-        EntityManagerFactory emf=Persistence.createEntityManagerFactory("ModeloVergaraPU");
-        RolesJpaController rjc=new RolesJpaController(emf);
-        List<Roles> rolesEntities = rjc.findRolesEntities();
+//        EntityManagerFactory emf=Persistence.createEntityManagerFactory("ModeloVergaraPU");
+//        RolesJpaController rjc=new RolesJpaController(emf);
+//        List<Roles> rolesEntities = rjc.findRolesEntities();
         
-        em.setRootContext(new AbstractNode(Children.create(new ElementChildFactory<Roles>(rolesEntities), true)));
+        List<String> ele=new LinkedList<String>();
+        for (int i = 0; i < 10; i++) {
+            ele.add("Hola"+i);
+            System.out.println(i);
+        }
+        
+        for (String string : ele) {
+            System.out.println(string);
+        }
+        
+        em.setRootContext(new AbstractNode(Children.create(new ElementChildFactory<String>(ele), true)));
+//        em.setRootContext(new ElementRootNode(Children.create(new ElementChildFactory<String>(ele), true)));
+        
+        
         
     }
 }

@@ -7,7 +7,6 @@
             <suite-component/>
             <module-dependencies/>
             <public-packages>
-                <package>modelovergara</package>
                 <package>modelovergara.bo</package>
             </public-packages>
             <class-path-extension>

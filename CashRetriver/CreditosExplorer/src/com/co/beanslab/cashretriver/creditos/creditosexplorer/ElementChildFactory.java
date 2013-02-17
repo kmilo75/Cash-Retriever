@@ -6,10 +6,13 @@ package com.co.beanslab.cashretriver.creditos.creditosexplorer;
 
 import java.beans.IntrospectionException;
 import java.util.List;
+import org.openide.nodes.AbstractNode;
 import org.openide.nodes.BeanNode;
 import org.openide.nodes.ChildFactory;
+import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
+import org.openide.util.lookup.Lookups;
 
 /**
  * Clase encargada de crear el nodo de tipo bean que representa el nodo en el
@@ -25,11 +28,15 @@ public class ElementChildFactory<T> extends ChildFactory<T> {
         this.result = result;
     }
 
+    public ElementChildFactory() {
+    }
+    
+
     @Override
     protected boolean createKeys(List<T> toPopulate) {
         try {
-            for (T cobros : toPopulate) {
-                result.add(cobros);
+            for (T element : toPopulate) {
+                result.add(element);
             }
             return true;
         } catch (Exception e) {
@@ -39,11 +46,15 @@ public class ElementChildFactory<T> extends ChildFactory<T> {
 
     @Override
     protected Node createNodeForKey(T key) {
-        try {
-            return new BeanNode(key);
-        } catch (IntrospectionException ex) {
-            Exceptions.printStackTrace(ex);
-            return null;
-        }
+//        try {
+//            return new BeanNode(key);
+//        } catch (IntrospectionException ex) {
+//            Exceptions.printStackTrace(ex);
+//            return null;
+//        }
+        
+        Node result=new AbstractNode(Children.create(new ElementChildFactory<T>(null), true), Lookups.singleton(key));
+        return result;
+        
     }
 }
