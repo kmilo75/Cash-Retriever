@@ -209,7 +209,7 @@ public class Deudas implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Deudas[ iddeudas=" + iddeudas + " ]";
+        return getIddeudas().toString();
     }
     
 }

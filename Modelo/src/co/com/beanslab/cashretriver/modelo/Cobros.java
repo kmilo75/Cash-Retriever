@@ -112,7 +112,7 @@ public class Cobros implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Cobros[ idcobros=" + idcobros + " ]";
+        return getIdcobros().toString();
     }
     
 }

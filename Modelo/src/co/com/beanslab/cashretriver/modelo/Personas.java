@@ -209,7 +209,7 @@ public class Personas implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Personas[ idpersonas=" + idpersonas + " ]";
+        return getNombre()+" "+getApellido();
     }
     
 }

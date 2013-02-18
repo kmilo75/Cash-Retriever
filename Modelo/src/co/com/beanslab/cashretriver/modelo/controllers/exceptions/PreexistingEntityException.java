@@ -1,4 +1,4 @@
-package co.com.beanslab.cashretriver.modelo.controller.exceptions;
+package co.com.beanslab.cashretriver.modelo.controllers.exceptions;
 
 public class PreexistingEntityException extends Exception {
     public PreexistingEntityException(String message, Throwable cause) {

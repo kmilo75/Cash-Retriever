@@ -1,4 +1,4 @@
-package co.com.beanslab.cashretriver.modelo.controller.exceptions;
+package co.com.beanslab.cashretriver.modelo.controllers.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;

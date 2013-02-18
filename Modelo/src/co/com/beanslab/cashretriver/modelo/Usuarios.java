@@ -105,7 +105,7 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Usuarios[ usuariosPK=" + usuariosPK + " ]";
+        return getUsuario();
     }
     
 }

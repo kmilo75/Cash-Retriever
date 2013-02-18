@@ -9,8 +9,10 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,44 +31,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Municipios.findAll", query = "SELECT m FROM Municipios m"),
-    @NamedQuery(name = "Municipios.findByIdmunicipios", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.idmunicipios = :idmunicipios"),
-    @NamedQuery(name = "Municipios.findByDepartamento", query = "SELECT m FROM Municipios m WHERE m.municipiosPK.departamento = :departamento"),
+    @NamedQuery(name = "Municipios.findByIdmunicipios", query = "SELECT m FROM Municipios m WHERE m.idmunicipios = :idmunicipios"),
     @NamedQuery(name = "Municipios.findByNombre", query = "SELECT m FROM Municipios m WHERE m.nombre = :nombre")})
 public class Municipios implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected MunicipiosPK municipiosPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idmunicipios")
+    private Integer idmunicipios;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipios")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipio")
     private Collection<Barrios> barriosCollection;
-    @JoinColumn(name = "departamento", referencedColumnName = "iddepartamentos", insertable = false, updatable = false)
+    @JoinColumn(name = "departamento", referencedColumnName = "iddepartamentos")
     @ManyToOne(optional = false)
-    private Departamentos departamentos;
+    private Departamentos departamento;
 
     public Municipios() {
     }
 
-    public Municipios(MunicipiosPK municipiosPK) {
-        this.municipiosPK = municipiosPK;
+    public Municipios(Integer idmunicipios) {
+        this.idmunicipios = idmunicipios;
     }
 
-    public Municipios(MunicipiosPK municipiosPK, String nombre) {
-        this.municipiosPK = municipiosPK;
+    public Municipios(Integer idmunicipios, String nombre) {
+        this.idmunicipios = idmunicipios;
         this.nombre = nombre;
     }
 
-    public Municipios(String idmunicipios, String departamento) {
-        this.municipiosPK = new MunicipiosPK(idmunicipios, departamento);
+    public Integer getIdmunicipios() {
+        return idmunicipios;
     }
 
-    public MunicipiosPK getMunicipiosPK() {
-        return municipiosPK;
-    }
-
-    public void setMunicipiosPK(MunicipiosPK municipiosPK) {
-        this.municipiosPK = municipiosPK;
+    public void setIdmunicipios(Integer idmunicipios) {
+        this.idmunicipios = idmunicipios;
     }
 
     public String getNombre() {
@@ -86,18 +86,18 @@ public class Municipios implements Serializable {
         this.barriosCollection = barriosCollection;
     }
 
-    public Departamentos getDepartamentos() {
-        return departamentos;
+    public Departamentos getDepartamento() {
+        return departamento;
     }
 
-    public void setDepartamentos(Departamentos departamentos) {
-        this.departamentos = departamentos;
+    public void setDepartamento(Departamentos departamento) {
+        this.departamento = departamento;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (municipiosPK != null ? municipiosPK.hashCode() : 0);
+        hash += (idmunicipios != null ? idmunicipios.hashCode() : 0);
         return hash;
     }
 
@@ -108,7 +108,7 @@ public class Municipios implements Serializable {
             return false;
         }
         Municipios other = (Municipios) object;
-        if ((this.municipiosPK == null && other.municipiosPK != null) || (this.municipiosPK != null && !this.municipiosPK.equals(other.municipiosPK))) {
+        if ((this.idmunicipios == null && other.idmunicipios != null) || (this.idmunicipios != null && !this.idmunicipios.equals(other.idmunicipios))) {
             return false;
         }
         return true;
@@ -116,7 +116,7 @@ public class Municipios implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Municipios[ municipiosPK=" + municipiosPK + " ]";
+        return getNombre()+" "+getDepartamento();
     }
     
 }

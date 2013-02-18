@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.beanslab.cashretriver.modelo.controller;
+package co.com.beanslab.cashretriver.modelo.controllers;
 
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -12,10 +12,8 @@ import javax.persistence.criteria.Root;
 import co.com.beanslab.cashretriver.modelo.Departamentos;
 import co.com.beanslab.cashretriver.modelo.Barrios;
 import co.com.beanslab.cashretriver.modelo.Municipios;
-import co.com.beanslab.cashretriver.modelo.MunicipiosPK;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.IllegalOrphanException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.NonexistentEntityException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.PreexistingEntityException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.IllegalOrphanException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,49 +35,40 @@ public class MunicipiosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Municipios municipios) throws PreexistingEntityException, Exception {
-        if (municipios.getMunicipiosPK() == null) {
-            municipios.setMunicipiosPK(new MunicipiosPK());
-        }
+    public void create(Municipios municipios) {
         if (municipios.getBarriosCollection() == null) {
             municipios.setBarriosCollection(new ArrayList<Barrios>());
         }
-        municipios.getMunicipiosPK().setDepartamento(municipios.getDepartamentos().getIddepartamentos());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Departamentos departamentos = municipios.getDepartamentos();
-            if (departamentos != null) {
-                departamentos = em.getReference(departamentos.getClass(), departamentos.getIddepartamentos());
-                municipios.setDepartamentos(departamentos);
+            Departamentos departamento = municipios.getDepartamento();
+            if (departamento != null) {
+                departamento = em.getReference(departamento.getClass(), departamento.getIddepartamentos());
+                municipios.setDepartamento(departamento);
             }
             Collection<Barrios> attachedBarriosCollection = new ArrayList<Barrios>();
             for (Barrios barriosCollectionBarriosToAttach : municipios.getBarriosCollection()) {
-                barriosCollectionBarriosToAttach = em.getReference(barriosCollectionBarriosToAttach.getClass(), barriosCollectionBarriosToAttach.getBarriosPK());
+                barriosCollectionBarriosToAttach = em.getReference(barriosCollectionBarriosToAttach.getClass(), barriosCollectionBarriosToAttach.getIdbarrios());
                 attachedBarriosCollection.add(barriosCollectionBarriosToAttach);
             }
             municipios.setBarriosCollection(attachedBarriosCollection);
             em.persist(municipios);
-            if (departamentos != null) {
-                departamentos.getMunicipiosCollection().add(municipios);
-                departamentos = em.merge(departamentos);
+            if (departamento != null) {
+                departamento.getMunicipiosCollection().add(municipios);
+                departamento = em.merge(departamento);
             }
             for (Barrios barriosCollectionBarrios : municipios.getBarriosCollection()) {
-                Municipios oldMunicipiosOfBarriosCollectionBarrios = barriosCollectionBarrios.getMunicipios();
-                barriosCollectionBarrios.setMunicipios(municipios);
+                Municipios oldMunicipioOfBarriosCollectionBarrios = barriosCollectionBarrios.getMunicipio();
+                barriosCollectionBarrios.setMunicipio(municipios);
                 barriosCollectionBarrios = em.merge(barriosCollectionBarrios);
-                if (oldMunicipiosOfBarriosCollectionBarrios != null) {
-                    oldMunicipiosOfBarriosCollectionBarrios.getBarriosCollection().remove(barriosCollectionBarrios);
-                    oldMunicipiosOfBarriosCollectionBarrios = em.merge(oldMunicipiosOfBarriosCollectionBarrios);
+                if (oldMunicipioOfBarriosCollectionBarrios != null) {
+                    oldMunicipioOfBarriosCollectionBarrios.getBarriosCollection().remove(barriosCollectionBarrios);
+                    oldMunicipioOfBarriosCollectionBarrios = em.merge(oldMunicipioOfBarriosCollectionBarrios);
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findMunicipios(municipios.getMunicipiosPK()) != null) {
-                throw new PreexistingEntityException("Municipios " + municipios + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -88,14 +77,13 @@ public class MunicipiosJpaController implements Serializable {
     }
 
     public void edit(Municipios municipios) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        municipios.getMunicipiosPK().setDepartamento(municipios.getDepartamentos().getIddepartamentos());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Municipios persistentMunicipios = em.find(Municipios.class, municipios.getMunicipiosPK());
-            Departamentos departamentosOld = persistentMunicipios.getDepartamentos();
-            Departamentos departamentosNew = municipios.getDepartamentos();
+            Municipios persistentMunicipios = em.find(Municipios.class, municipios.getIdmunicipios());
+            Departamentos departamentoOld = persistentMunicipios.getDepartamento();
+            Departamentos departamentoNew = municipios.getDepartamento();
             Collection<Barrios> barriosCollectionOld = persistentMunicipios.getBarriosCollection();
             Collection<Barrios> barriosCollectionNew = municipios.getBarriosCollection();
             List<String> illegalOrphanMessages = null;
@@ -104,40 +92,40 @@ public class MunicipiosJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Barrios " + barriosCollectionOldBarrios + " since its municipios field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Barrios " + barriosCollectionOldBarrios + " since its municipio field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (departamentosNew != null) {
-                departamentosNew = em.getReference(departamentosNew.getClass(), departamentosNew.getIddepartamentos());
-                municipios.setDepartamentos(departamentosNew);
+            if (departamentoNew != null) {
+                departamentoNew = em.getReference(departamentoNew.getClass(), departamentoNew.getIddepartamentos());
+                municipios.setDepartamento(departamentoNew);
             }
             Collection<Barrios> attachedBarriosCollectionNew = new ArrayList<Barrios>();
             for (Barrios barriosCollectionNewBarriosToAttach : barriosCollectionNew) {
-                barriosCollectionNewBarriosToAttach = em.getReference(barriosCollectionNewBarriosToAttach.getClass(), barriosCollectionNewBarriosToAttach.getBarriosPK());
+                barriosCollectionNewBarriosToAttach = em.getReference(barriosCollectionNewBarriosToAttach.getClass(), barriosCollectionNewBarriosToAttach.getIdbarrios());
                 attachedBarriosCollectionNew.add(barriosCollectionNewBarriosToAttach);
             }
             barriosCollectionNew = attachedBarriosCollectionNew;
             municipios.setBarriosCollection(barriosCollectionNew);
             municipios = em.merge(municipios);
-            if (departamentosOld != null && !departamentosOld.equals(departamentosNew)) {
-                departamentosOld.getMunicipiosCollection().remove(municipios);
-                departamentosOld = em.merge(departamentosOld);
+            if (departamentoOld != null && !departamentoOld.equals(departamentoNew)) {
+                departamentoOld.getMunicipiosCollection().remove(municipios);
+                departamentoOld = em.merge(departamentoOld);
             }
-            if (departamentosNew != null && !departamentosNew.equals(departamentosOld)) {
-                departamentosNew.getMunicipiosCollection().add(municipios);
-                departamentosNew = em.merge(departamentosNew);
+            if (departamentoNew != null && !departamentoNew.equals(departamentoOld)) {
+                departamentoNew.getMunicipiosCollection().add(municipios);
+                departamentoNew = em.merge(departamentoNew);
             }
             for (Barrios barriosCollectionNewBarrios : barriosCollectionNew) {
                 if (!barriosCollectionOld.contains(barriosCollectionNewBarrios)) {
-                    Municipios oldMunicipiosOfBarriosCollectionNewBarrios = barriosCollectionNewBarrios.getMunicipios();
-                    barriosCollectionNewBarrios.setMunicipios(municipios);
+                    Municipios oldMunicipioOfBarriosCollectionNewBarrios = barriosCollectionNewBarrios.getMunicipio();
+                    barriosCollectionNewBarrios.setMunicipio(municipios);
                     barriosCollectionNewBarrios = em.merge(barriosCollectionNewBarrios);
-                    if (oldMunicipiosOfBarriosCollectionNewBarrios != null && !oldMunicipiosOfBarriosCollectionNewBarrios.equals(municipios)) {
-                        oldMunicipiosOfBarriosCollectionNewBarrios.getBarriosCollection().remove(barriosCollectionNewBarrios);
-                        oldMunicipiosOfBarriosCollectionNewBarrios = em.merge(oldMunicipiosOfBarriosCollectionNewBarrios);
+                    if (oldMunicipioOfBarriosCollectionNewBarrios != null && !oldMunicipioOfBarriosCollectionNewBarrios.equals(municipios)) {
+                        oldMunicipioOfBarriosCollectionNewBarrios.getBarriosCollection().remove(barriosCollectionNewBarrios);
+                        oldMunicipioOfBarriosCollectionNewBarrios = em.merge(oldMunicipioOfBarriosCollectionNewBarrios);
                     }
                 }
             }
@@ -145,7 +133,7 @@ public class MunicipiosJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                MunicipiosPK id = municipios.getMunicipiosPK();
+                Integer id = municipios.getIdmunicipios();
                 if (findMunicipios(id) == null) {
                     throw new NonexistentEntityException("The municipios with id " + id + " no longer exists.");
                 }
@@ -158,7 +146,7 @@ public class MunicipiosJpaController implements Serializable {
         }
     }
 
-    public void destroy(MunicipiosPK id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -166,7 +154,7 @@ public class MunicipiosJpaController implements Serializable {
             Municipios municipios;
             try {
                 municipios = em.getReference(Municipios.class, id);
-                municipios.getMunicipiosPK();
+                municipios.getIdmunicipios();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The municipios with id " + id + " no longer exists.", enfe);
             }
@@ -176,15 +164,15 @@ public class MunicipiosJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Municipios (" + municipios + ") cannot be destroyed since the Barrios " + barriosCollectionOrphanCheckBarrios + " in its barriosCollection field has a non-nullable municipios field.");
+                illegalOrphanMessages.add("This Municipios (" + municipios + ") cannot be destroyed since the Barrios " + barriosCollectionOrphanCheckBarrios + " in its barriosCollection field has a non-nullable municipio field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Departamentos departamentos = municipios.getDepartamentos();
-            if (departamentos != null) {
-                departamentos.getMunicipiosCollection().remove(municipios);
-                departamentos = em.merge(departamentos);
+            Departamentos departamento = municipios.getDepartamento();
+            if (departamento != null) {
+                departamento.getMunicipiosCollection().remove(municipios);
+                departamento = em.merge(departamento);
             }
             em.remove(municipios);
             em.getTransaction().commit();
@@ -219,7 +207,7 @@ public class MunicipiosJpaController implements Serializable {
         }
     }
 
-    public Municipios findMunicipios(MunicipiosPK id) {
+    public Municipios findMunicipios(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Municipios.class, id);

@@ -9,8 +9,10 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -29,44 +31,42 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Barrios.findAll", query = "SELECT b FROM Barrios b"),
-    @NamedQuery(name = "Barrios.findByIdbarrios", query = "SELECT b FROM Barrios b WHERE b.barriosPK.idbarrios = :idbarrios"),
-    @NamedQuery(name = "Barrios.findByMunicipio", query = "SELECT b FROM Barrios b WHERE b.barriosPK.municipio = :municipio"),
+    @NamedQuery(name = "Barrios.findByIdbarrios", query = "SELECT b FROM Barrios b WHERE b.idbarrios = :idbarrios"),
     @NamedQuery(name = "Barrios.findByNombre", query = "SELECT b FROM Barrios b WHERE b.nombre = :nombre")})
 public class Barrios implements Serializable {
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected BarriosPK barriosPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idbarrios")
+    private Integer idbarrios;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
-    @JoinColumn(name = "municipio", referencedColumnName = "idmunicipios", insertable = false, updatable = false)
+    @JoinColumn(name = "municipio", referencedColumnName = "idmunicipios")
     @ManyToOne(optional = false)
-    private Municipios municipios;
+    private Municipios municipio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "barrio")
     private Collection<Personas> personasCollection;
 
     public Barrios() {
     }
 
-    public Barrios(BarriosPK barriosPK) {
-        this.barriosPK = barriosPK;
+    public Barrios(Integer idbarrios) {
+        this.idbarrios = idbarrios;
     }
 
-    public Barrios(BarriosPK barriosPK, String nombre) {
-        this.barriosPK = barriosPK;
+    public Barrios(Integer idbarrios, String nombre) {
+        this.idbarrios = idbarrios;
         this.nombre = nombre;
     }
 
-    public Barrios(int idbarrios, String municipio) {
-        this.barriosPK = new BarriosPK(idbarrios, municipio);
+    public Integer getIdbarrios() {
+        return idbarrios;
     }
 
-    public BarriosPK getBarriosPK() {
-        return barriosPK;
-    }
-
-    public void setBarriosPK(BarriosPK barriosPK) {
-        this.barriosPK = barriosPK;
+    public void setIdbarrios(Integer idbarrios) {
+        this.idbarrios = idbarrios;
     }
 
     public String getNombre() {
@@ -77,12 +77,12 @@ public class Barrios implements Serializable {
         this.nombre = nombre;
     }
 
-    public Municipios getMunicipios() {
-        return municipios;
+    public Municipios getMunicipio() {
+        return municipio;
     }
 
-    public void setMunicipios(Municipios municipios) {
-        this.municipios = municipios;
+    public void setMunicipio(Municipios municipio) {
+        this.municipio = municipio;
     }
 
     @XmlTransient
@@ -97,7 +97,7 @@ public class Barrios implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (barriosPK != null ? barriosPK.hashCode() : 0);
+        hash += (idbarrios != null ? idbarrios.hashCode() : 0);
         return hash;
     }
 
@@ -108,7 +108,7 @@ public class Barrios implements Serializable {
             return false;
         }
         Barrios other = (Barrios) object;
-        if ((this.barriosPK == null && other.barriosPK != null) || (this.barriosPK != null && !this.barriosPK.equals(other.barriosPK))) {
+        if ((this.idbarrios == null && other.idbarrios != null) || (this.idbarrios != null && !this.idbarrios.equals(other.idbarrios))) {
             return false;
         }
         return true;
@@ -116,7 +116,7 @@ public class Barrios implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Barrios[ barriosPK=" + barriosPK + " ]";
+        return getNombre();
     }
     
 }

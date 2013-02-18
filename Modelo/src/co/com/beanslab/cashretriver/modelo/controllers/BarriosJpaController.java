@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.beanslab.cashretriver.modelo.controller;
+package co.com.beanslab.cashretriver.modelo.controllers;
 
 import co.com.beanslab.cashretriver.modelo.Barrios;
-import co.com.beanslab.cashretriver.modelo.BarriosPK;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -13,9 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import co.com.beanslab.cashretriver.modelo.Municipios;
 import co.com.beanslab.cashretriver.modelo.Personas;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.IllegalOrphanException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.NonexistentEntityException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.PreexistingEntityException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.IllegalOrphanException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,22 +35,18 @@ public class BarriosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Barrios barrios) throws PreexistingEntityException, Exception {
-        if (barrios.getBarriosPK() == null) {
-            barrios.setBarriosPK(new BarriosPK());
-        }
+    public void create(Barrios barrios) {
         if (barrios.getPersonasCollection() == null) {
             barrios.setPersonasCollection(new ArrayList<Personas>());
         }
-        barrios.getBarriosPK().setMunicipio(barrios.getMunicipios().getMunicipiosPK().getIdmunicipios());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Municipios municipios = barrios.getMunicipios();
-            if (municipios != null) {
-                municipios = em.getReference(municipios.getClass(), municipios.getMunicipiosPK());
-                barrios.setMunicipios(municipios);
+            Municipios municipio = barrios.getMunicipio();
+            if (municipio != null) {
+                municipio = em.getReference(municipio.getClass(), municipio.getIdmunicipios());
+                barrios.setMunicipio(municipio);
             }
             Collection<Personas> attachedPersonasCollection = new ArrayList<Personas>();
             for (Personas personasCollectionPersonasToAttach : barrios.getPersonasCollection()) {
@@ -61,9 +55,9 @@ public class BarriosJpaController implements Serializable {
             }
             barrios.setPersonasCollection(attachedPersonasCollection);
             em.persist(barrios);
-            if (municipios != null) {
-                municipios.getBarriosCollection().add(barrios);
-                municipios = em.merge(municipios);
+            if (municipio != null) {
+                municipio.getBarriosCollection().add(barrios);
+                municipio = em.merge(municipio);
             }
             for (Personas personasCollectionPersonas : barrios.getPersonasCollection()) {
                 Barrios oldBarrioOfPersonasCollectionPersonas = personasCollectionPersonas.getBarrio();
@@ -75,11 +69,6 @@ public class BarriosJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findBarrios(barrios.getBarriosPK()) != null) {
-                throw new PreexistingEntityException("Barrios " + barrios + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -88,14 +77,13 @@ public class BarriosJpaController implements Serializable {
     }
 
     public void edit(Barrios barrios) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        barrios.getBarriosPK().setMunicipio(barrios.getMunicipios().getMunicipiosPK().getIdmunicipios());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Barrios persistentBarrios = em.find(Barrios.class, barrios.getBarriosPK());
-            Municipios municipiosOld = persistentBarrios.getMunicipios();
-            Municipios municipiosNew = barrios.getMunicipios();
+            Barrios persistentBarrios = em.find(Barrios.class, barrios.getIdbarrios());
+            Municipios municipioOld = persistentBarrios.getMunicipio();
+            Municipios municipioNew = barrios.getMunicipio();
             Collection<Personas> personasCollectionOld = persistentBarrios.getPersonasCollection();
             Collection<Personas> personasCollectionNew = barrios.getPersonasCollection();
             List<String> illegalOrphanMessages = null;
@@ -110,9 +98,9 @@ public class BarriosJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (municipiosNew != null) {
-                municipiosNew = em.getReference(municipiosNew.getClass(), municipiosNew.getMunicipiosPK());
-                barrios.setMunicipios(municipiosNew);
+            if (municipioNew != null) {
+                municipioNew = em.getReference(municipioNew.getClass(), municipioNew.getIdmunicipios());
+                barrios.setMunicipio(municipioNew);
             }
             Collection<Personas> attachedPersonasCollectionNew = new ArrayList<Personas>();
             for (Personas personasCollectionNewPersonasToAttach : personasCollectionNew) {
@@ -122,13 +110,13 @@ public class BarriosJpaController implements Serializable {
             personasCollectionNew = attachedPersonasCollectionNew;
             barrios.setPersonasCollection(personasCollectionNew);
             barrios = em.merge(barrios);
-            if (municipiosOld != null && !municipiosOld.equals(municipiosNew)) {
-                municipiosOld.getBarriosCollection().remove(barrios);
-                municipiosOld = em.merge(municipiosOld);
+            if (municipioOld != null && !municipioOld.equals(municipioNew)) {
+                municipioOld.getBarriosCollection().remove(barrios);
+                municipioOld = em.merge(municipioOld);
             }
-            if (municipiosNew != null && !municipiosNew.equals(municipiosOld)) {
-                municipiosNew.getBarriosCollection().add(barrios);
-                municipiosNew = em.merge(municipiosNew);
+            if (municipioNew != null && !municipioNew.equals(municipioOld)) {
+                municipioNew.getBarriosCollection().add(barrios);
+                municipioNew = em.merge(municipioNew);
             }
             for (Personas personasCollectionNewPersonas : personasCollectionNew) {
                 if (!personasCollectionOld.contains(personasCollectionNewPersonas)) {
@@ -145,7 +133,7 @@ public class BarriosJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                BarriosPK id = barrios.getBarriosPK();
+                Integer id = barrios.getIdbarrios();
                 if (findBarrios(id) == null) {
                     throw new NonexistentEntityException("The barrios with id " + id + " no longer exists.");
                 }
@@ -158,7 +146,7 @@ public class BarriosJpaController implements Serializable {
         }
     }
 
-    public void destroy(BarriosPK id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -166,7 +154,7 @@ public class BarriosJpaController implements Serializable {
             Barrios barrios;
             try {
                 barrios = em.getReference(Barrios.class, id);
-                barrios.getBarriosPK();
+                barrios.getIdbarrios();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The barrios with id " + id + " no longer exists.", enfe);
             }
@@ -181,10 +169,10 @@ public class BarriosJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Municipios municipios = barrios.getMunicipios();
-            if (municipios != null) {
-                municipios.getBarriosCollection().remove(barrios);
-                municipios = em.merge(municipios);
+            Municipios municipio = barrios.getMunicipio();
+            if (municipio != null) {
+                municipio.getBarriosCollection().remove(barrios);
+                municipio = em.merge(municipio);
             }
             em.remove(barrios);
             em.getTransaction().commit();
@@ -219,7 +207,7 @@ public class BarriosJpaController implements Serializable {
         }
     }
 
-    public Barrios findBarrios(BarriosPK id) {
+    public Barrios findBarrios(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Barrios.class, id);

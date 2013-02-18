@@ -97,7 +97,7 @@ public class Roles implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Roles[ idroles=" + idroles + " ]";
+        return getDescripcion();
     }
     
 }

@@ -1,4 +1,4 @@
-package co.com.beanslab.cashretriver.modelo.controller.exceptions;
+package co.com.beanslab.cashretriver.modelo.controllers.exceptions;
 
 public class NonexistentEntityException extends Exception {
     public NonexistentEntityException(String message, Throwable cause) {

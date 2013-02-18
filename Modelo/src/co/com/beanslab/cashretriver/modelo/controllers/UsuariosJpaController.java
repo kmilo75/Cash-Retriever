@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.beanslab.cashretriver.modelo.controller;
+package co.com.beanslab.cashretriver.modelo.controllers;
 
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -12,8 +12,8 @@ import javax.persistence.criteria.Root;
 import co.com.beanslab.cashretriver.modelo.Personas;
 import co.com.beanslab.cashretriver.modelo.Usuarios;
 import co.com.beanslab.cashretriver.modelo.UsuariosPK;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.NonexistentEntityException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.PreexistingEntityException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.NonexistentEntityException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.PreexistingEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

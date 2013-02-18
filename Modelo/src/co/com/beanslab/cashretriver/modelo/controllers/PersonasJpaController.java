@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.com.beanslab.cashretriver.modelo.controller;
+package co.com.beanslab.cashretriver.modelo.controllers;
 
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import co.com.beanslab.cashretriver.modelo.Salidas;
 import co.com.beanslab.cashretriver.modelo.Usuarios;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.IllegalOrphanException;
-import co.com.beanslab.cashretriver.modelo.controller.exceptions.NonexistentEntityException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.IllegalOrphanException;
+import co.com.beanslab.cashretriver.modelo.controllers.exceptions.NonexistentEntityException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -62,7 +62,7 @@ public class PersonasJpaController implements Serializable {
             }
             Barrios barrio = personas.getBarrio();
             if (barrio != null) {
-                barrio = em.getReference(barrio.getClass(), barrio.getBarriosPK());
+                barrio = em.getReference(barrio.getClass(), barrio.getIdbarrios());
                 personas.setBarrio(barrio);
             }
             Collection<Deudas> attachedDeudasCollection = new ArrayList<Deudas>();
@@ -201,7 +201,7 @@ public class PersonasJpaController implements Serializable {
                 personas.setRol(rolNew);
             }
             if (barrioNew != null) {
-                barrioNew = em.getReference(barrioNew.getClass(), barrioNew.getBarriosPK());
+                barrioNew = em.getReference(barrioNew.getClass(), barrioNew.getIdbarrios());
                 personas.setBarrio(barrioNew);
             }
             Collection<Deudas> attachedDeudasCollectionNew = new ArrayList<Deudas>();

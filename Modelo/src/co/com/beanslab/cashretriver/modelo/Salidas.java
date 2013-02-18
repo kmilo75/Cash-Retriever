@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Salidas.findByLiquidacion", query = "SELECT s FROM Salidas s WHERE s.liquidacion = :liquidacion"),
     @NamedQuery(name = "Salidas.findByRecaudo", query = "SELECT s FROM Salidas s WHERE s.recaudo = :recaudo")})
 public class Salidas implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -159,7 +160,6 @@ public class Salidas implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Salidas[ idsalidas=" + idsalidas + " ]";
+        return getIdsalidas().toString();
     }
-    
 }

@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -33,34 +35,35 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Departamentos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "iddepartamentos")
-    private String iddepartamentos;
+    private Integer iddepartamentos;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "departamentoscol")
     private String departamentoscol;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamentos")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamento")
     private Collection<Municipios> municipiosCollection;
 
     public Departamentos() {
     }
 
-    public Departamentos(String iddepartamentos) {
+    public Departamentos(Integer iddepartamentos) {
         this.iddepartamentos = iddepartamentos;
     }
 
-    public Departamentos(String iddepartamentos, String nombre) {
+    public Departamentos(Integer iddepartamentos, String nombre) {
         this.iddepartamentos = iddepartamentos;
         this.nombre = nombre;
     }
 
-    public String getIddepartamentos() {
+    public Integer getIddepartamentos() {
         return iddepartamentos;
     }
 
-    public void setIddepartamentos(String iddepartamentos) {
+    public void setIddepartamentos(Integer iddepartamentos) {
         this.iddepartamentos = iddepartamentos;
     }
 
@@ -111,7 +114,7 @@ public class Departamentos implements Serializable {
 
     @Override
     public String toString() {
-        return "co.com.beanslab.cashretriver.modelo.Departamentos[ iddepartamentos=" + iddepartamentos + " ]";
+        return getNombre();
     }
     
 }
