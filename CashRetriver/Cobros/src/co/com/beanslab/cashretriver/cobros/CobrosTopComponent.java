@@ -19,7 +19,7 @@ import org.openide.util.NbBundle.Messages;
 autostore = false)
 @TopComponent.Description(
     preferredID = "CobrosTopComponent",
-iconBase = "co/com/beanslab/cashretriver/cobros/cobro32x32.png",
+iconBase = "co/com/beanslab/cashretriver/cobros/cobro16x16.png",
 persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = true)
 @ActionID(category = "Window", id = "co.com.beanslab.cashretriver.cobros.CobrosTopComponent")
@@ -29,8 +29,8 @@ persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 preferredID = "CobrosTopComponent")
 @Messages({
     "CTL_CobrosAction=Cobros",
-    "CTL_CobrosTopComponent=Cobros Window",
-    "HINT_CobrosTopComponent=This is a Cobros window"
+    "CTL_CobrosTopComponent=Cobros Ventana",
+    "HINT_CobrosTopComponent=Esta es la ventada de cobros"
 })
 public final class CobrosTopComponent extends TopComponent {
 
