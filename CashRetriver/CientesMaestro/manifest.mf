@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module: co.com.beanslab.cashretriver.maestros.clientes
-OpenIDE-Module-Localizing-Bundle: co/com/beanslab/cashretriver/maestros/clientes/Bundle.properties
-OpenIDE-Module-Specification-Version: 1.0
-
