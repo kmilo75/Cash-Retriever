@@ -4,7 +4,12 @@
  */
 package co.com.beanslab.cashretriver.cobros;
 
+
+import com.toedter.calendar.JDateChooserCellEditor;
 import java.util.Date;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -17,18 +22,18 @@ import org.openide.util.NbBundle.Messages;
  * Top component which displays something.
  */
 @ConvertAsProperties(
-    dtd = "-//co.com.beanslab.cashretriver.cobros//Cobros//EN",
-autostore = false)
+        dtd = "-//co.com.beanslab.cashretriver.cobros//Cobros//EN",
+        autostore = false)
 @TopComponent.Description(
-    preferredID = "CobrosTopComponent",
-iconBase = "co/com/beanslab/cashretriver/cobros/cobro16x16.png",
-persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+        preferredID = "CobrosTopComponent",
+        iconBase = "co/com/beanslab/cashretriver/cobros/cobro16x16.png",
+        persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "editor", openAtStartup = true)
 @ActionID(category = "Window", id = "co.com.beanslab.cashretriver.cobros.CobrosTopComponent")
 @ActionReference(path = "Menu/Window" /*, position = 333 */)
 @TopComponent.OpenActionRegistration(
-    displayName = "#CTL_CobrosAction",
-preferredID = "CobrosTopComponent")
+        displayName = "#CTL_CobrosAction",
+        preferredID = "CobrosTopComponent")
 @Messages({
     "CTL_CobrosAction=Cobros",
     "CTL_CobrosTopComponent=Cobros Ventana",
@@ -42,7 +47,7 @@ public final class CobrosTopComponent extends TopComponent {
         setToolTipText(Bundle.HINT_CobrosTopComponent());
         AutoCompleteDecorator.decorate(cliente_jComboBox);
         AutoCompleteDecorator.decorate(cobrador_jComboBox);
-        
+        configurarTabla();
 
     }
 
@@ -304,7 +309,7 @@ public final class CobrosTopComponent extends TopComponent {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Double.class, java.lang.String.class, java.lang.Double.class
+                Date.class, java.lang.Double.class, java.lang.String.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -312,9 +317,6 @@ public final class CobrosTopComponent extends TopComponent {
             }
         });
         abonos_jScrollPane.setViewportView(abonos_jXTable);
-        abonos_jXTable.setAutoCreateRowSorter (true);
-        abonos_jXTable.setColumnControlVisible (true);
-        //abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel12.text")); // NOI18N
 
@@ -416,7 +418,6 @@ public final class CobrosTopComponent extends TopComponent {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel abonos_jPanel;
     private javax.swing.JScrollPane abonos_jScrollPane;
@@ -456,6 +457,7 @@ public final class CobrosTopComponent extends TopComponent {
     private javax.swing.JScrollPane prestamosActivos_jScrollPane;
     private javax.swing.JTextField totalPrestamo_jTextField;
     // End of variables declaration//GEN-END:variables
+
     @Override
     public void componentOpened() {
         // TODO add custom code on component opening
@@ -476,5 +478,16 @@ public final class CobrosTopComponent extends TopComponent {
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private void configurarTabla() {
+        abonos_jXTable.setAutoCreateRowSorter(true);
+        abonos_jXTable.setColumnControlVisible(true);
+        abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
+        TableColumn columnaFecha = abonos_jXTable.getColumnModel().getColumn(0);
+//        columnaFecha.setCellRenderer(new JDateChooserRenderer());
+        columnaFecha.setCellEditor(new JDateChooserCellEditor());
+       
+       
     }
 }
