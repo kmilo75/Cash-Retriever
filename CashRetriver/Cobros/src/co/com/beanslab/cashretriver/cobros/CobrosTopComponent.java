@@ -6,6 +6,7 @@ package co.com.beanslab.cashretriver.cobros;
 
 import java.util.Date;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -53,7 +54,6 @@ public final class CobrosTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel13 = new javax.swing.JLabel();
         cobrador_jPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cobrador_jComboBox = new javax.swing.JComboBox();
@@ -85,14 +85,12 @@ public final class CobrosTopComponent extends TopComponent {
         jXList1 = new org.jdesktop.swingx.JXList();
         jPanel3 = new javax.swing.JPanel();
         abonos_jScrollPane = new javax.swing.JScrollPane();
-        jXTable1 = new org.jdesktop.swingx.JXTable();
+        abonos_jXTable = new org.jdesktop.swingx.JXTable();
         jLabel12 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         fechaAbono_jDateChooser = new com.toedter.calendar.JDateChooser();
         jButton1 = new javax.swing.JButton();
-
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel13.text")); // NOI18N
 
         cobrador_jPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.cobrador_jPanel.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.blue)); // NOI18N
 
@@ -294,7 +292,7 @@ public final class CobrosTopComponent extends TopComponent {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jPanel3.border.title"), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.blue)); // NOI18N
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
+        abonos_jXTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -302,10 +300,21 @@ public final class CobrosTopComponent extends TopComponent {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "FECHA", "MONTO", "COBRADOR", "SALDO"
             }
-        ));
-        abonos_jScrollPane.setViewportView(jXTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Double.class, java.lang.String.class, java.lang.Double.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        abonos_jScrollPane.setViewportView(abonos_jXTable);
+        abonos_jXTable.setAutoCreateRowSorter (true);
+        abonos_jXTable.setColumnControlVisible (true);
+        abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel12.text")); // NOI18N
 
@@ -411,6 +420,7 @@ public final class CobrosTopComponent extends TopComponent {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel abonos_jPanel;
     private javax.swing.JScrollPane abonos_jScrollPane;
+    private org.jdesktop.swingx.JXTable abonos_jXTable;
     private javax.swing.JTextField baseMonto_jTextField;
     private javax.swing.JComboBox cliente_jComboBox;
     private javax.swing.JComboBox cobrador_jComboBox;
@@ -424,7 +434,6 @@ public final class CobrosTopComponent extends TopComponent {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -442,7 +451,6 @@ public final class CobrosTopComponent extends TopComponent {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextPane jTextPane1;
     private org.jdesktop.swingx.JXList jXList1;
-    private org.jdesktop.swingx.JXTable jXTable1;
     private javax.swing.JTextField prestamoMonto_jTextField;
     private javax.swing.JPanel prestamo_jPanel;
     private javax.swing.JScrollPane prestamosActivos_jScrollPane;
