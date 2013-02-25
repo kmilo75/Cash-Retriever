@@ -4,11 +4,10 @@
  */
 package co.com.beanslab.cashretriver.creditos.creditosexplorer;
 
-import co.com.beanslab.cashretriver.modelo.Cobros;
-import co.com.beanslab.cashretriver.modelo.Roles;
-import co.com.beanslab.cashretriver.modelo.controllers.CobrosJpaController;
-import co.com.beanslab.cashretriver.modelo.controllers.RolesJpaController;
 
+
+import co.com.beanslab.cashretriver.modelo.Cobros;
+import co.com.beanslab.cashretriver.modelo.controllers.CobrosJpaController;
 import java.util.List;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,11 +16,9 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.explorer.ExplorerManager;
 import org.openide.explorer.ExplorerUtils;
-import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
-import org.openide.util.lookup.Lookups;
 
 /**
  * Top component which displays something.

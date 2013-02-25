@@ -561,7 +561,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="abonos_jXTable.setAutoCreateRowSorter (true);&#xa;abonos_jXTable.setColumnControlVisible (true);&#xa;abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());"/>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="abonos_jXTable.setAutoCreateRowSorter (true);&#xa;abonos_jXTable.setColumnControlVisible (true);&#xa;//abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

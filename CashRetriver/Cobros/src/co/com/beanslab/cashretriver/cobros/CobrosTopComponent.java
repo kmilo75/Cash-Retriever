@@ -314,7 +314,7 @@ public final class CobrosTopComponent extends TopComponent {
         abonos_jScrollPane.setViewportView(abonos_jXTable);
         abonos_jXTable.setAutoCreateRowSorter (true);
         abonos_jXTable.setColumnControlVisible (true);
-        abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
+        //abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel12.text")); // NOI18N
 
