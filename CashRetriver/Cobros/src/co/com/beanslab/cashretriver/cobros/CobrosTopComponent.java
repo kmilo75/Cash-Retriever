@@ -5,8 +5,16 @@
 package co.com.beanslab.cashretriver.cobros;
 
 
+import co.com.beanslab.cashretriver.modelo.Personas;
+import co.com.beanslab.cashretriver.modelo.controllers.PersonasJpaController;
 import com.toedter.calendar.JDateChooserCellEditor;
 import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -48,6 +56,7 @@ public final class CobrosTopComponent extends TopComponent {
         AutoCompleteDecorator.decorate(cliente_jComboBox);
         AutoCompleteDecorator.decorate(cobrador_jComboBox);
         configurarTabla();
+        cargarDatos();
 
     }
 
@@ -485,9 +494,31 @@ public final class CobrosTopComponent extends TopComponent {
         abonos_jXTable.setColumnControlVisible(true);
         abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
         TableColumn columnaFecha = abonos_jXTable.getColumnModel().getColumn(0);
-//        columnaFecha.setCellRenderer(new JDateChooserRenderer());
         columnaFecha.setCellEditor(new JDateChooserCellEditor());
        
        
     }
+
+    private void cargarDatos() {
+   
+       cargarPersonas(2, cobrador_jComboBox );
+       cargarPersonas(3, cliente_jComboBox);
+    }
+
+       /**
+     * Método que llena los comboBoxes de personas identificandolas con el rol correspondiente.
+     * si rol =1 administrador, 2=cobrador, 3 cliente
+     * @param rolId Rol que se desea buscar.
+     * @param combo Combo que se quiere llenar
+     */
+    private void cargarPersonas(int rolId, JComboBox combo) {
+        EntityManagerFactory emf=Persistence.createEntityManagerFactory("ModeloPU");
+        PersonasJpaController clienteController =new PersonasJpaController(emf);
+        List<co.com.beanslab.cashretriver.modelo.Personas> personas = clienteController.findPersonasEntitiesByRol(rolId);//2 es cobrador 3:cliente 1:administrador
+        combo.setModel(new DefaultComboBoxModel<Personas>((Vector<Personas>) personas));
+    }
+
+  
+    
+    
 }
