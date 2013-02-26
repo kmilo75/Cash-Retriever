@@ -420,6 +420,7 @@ public class PersonasJpaController implements Serializable {
 //          q.select(c).where(cb.equal(c.get("population"), p));
 //            q.select(c).where(cb.equal(c.get(Personas_.rol), rol));
             cq.where(cb.equal(personas.get(Personas_.rol), rol));
+            cq.orderBy(cb.asc(personas.get(Personas_.apellido)));
 
             //Corremos la consulta en si
             TypedQuery<Personas> query = em.createQuery(cq);
