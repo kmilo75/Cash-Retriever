@@ -6,7 +6,9 @@ package co.com.beanslab.cashretriver.cobros;
 
 
 import co.com.beanslab.cashretriver.modelo.Personas;
+import co.com.beanslab.cashretriver.modelo.Roles;
 import co.com.beanslab.cashretriver.modelo.controllers.PersonasJpaController;
+
 import com.toedter.calendar.JDateChooserCellEditor;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -111,7 +112,7 @@ public final class CobrosTopComponent extends TopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel1.text")); // NOI18N
 
         cobrador_jComboBox.setEditable(true);
-        cobrador_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Juanito Alimaña", "Juaquin Perez", "Armando Manzanero", "Paquita La del Barrio", "Pedro Navaja" }));
+        cobrador_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pablo alimaña", "Pedro navaja", "Paquita la del barrio" }));
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(CobrosTopComponent.class, "CobrosTopComponent.jLabel2.text")); // NOI18N
 
@@ -501,21 +502,21 @@ public final class CobrosTopComponent extends TopComponent {
 
     private void cargarDatos() {
    
-       cargarPersonas(2, cobrador_jComboBox );
-       cargarPersonas(3, cliente_jComboBox);
+       cargarPersonas(new Roles(2), cobrador_jComboBox );
+       cargarPersonas(new Roles(3), cliente_jComboBox);
     }
 
        /**
      * Método que llena los comboBoxes de personas identificandolas con el rol correspondiente.
      * si rol =1 administrador, 2=cobrador, 3 cliente
-     * @param rolId Rol que se desea buscar.
+     * @param rol Rol que se desea buscar.
      * @param combo Combo que se quiere llenar
      */
-    private void cargarPersonas(int rolId, JComboBox combo) {
+    private void cargarPersonas(Roles rol, JComboBox<Personas> combo) {
         EntityManagerFactory emf=Persistence.createEntityManagerFactory("ModeloPU");
         PersonasJpaController clienteController =new PersonasJpaController(emf);
-        List<co.com.beanslab.cashretriver.modelo.Personas> personas = clienteController.findPersonasEntitiesByRol(rolId);//2 es cobrador 3:cliente 1:administrador
-        combo.setModel(new DefaultComboBoxModel<Personas>((Vector<Personas>) personas));
+        List<Personas> personas = clienteController.findPersonasEntitiesByRol(rol);
+        combo.setModel(new DefaultComboBoxModel((Vector<Personas>) personas));
     }
 
   

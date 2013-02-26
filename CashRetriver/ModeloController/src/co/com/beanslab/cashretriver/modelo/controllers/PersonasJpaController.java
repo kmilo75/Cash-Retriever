@@ -13,6 +13,7 @@ import co.com.beanslab.cashretriver.modelo.Roles;
 import co.com.beanslab.cashretriver.modelo.Barrios;
 import co.com.beanslab.cashretriver.modelo.Deudas;
 import co.com.beanslab.cashretriver.modelo.Personas;
+import co.com.beanslab.cashretriver.modelo.Personas_;
 import java.util.ArrayList;
 import java.util.Collection;
 import co.com.beanslab.cashretriver.modelo.Salidas;
@@ -22,6 +23,9 @@ import co.com.beanslab.cashretriver.modelo.controllers.exceptions.NonexistentEnt
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.ParameterExpression;
 
 /**
  *
@@ -397,6 +401,43 @@ public class PersonasJpaController implements Serializable {
         }
     }
 
+    /**
+     * Devuelve una lista de personas deacuerdo al rol
+     *
+     * @param rol Numero del rol que se desea
+     * @return Lista de personas que coinciden con el rol seleccionado.
+     */
+    public List<Personas> findPersonasEntitiesByRol(Roles rol) {
+        EntityManager em = getEntityManager();
+        try {
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Personas> cq = cb.createQuery(Personas.class);
+
+            // construimos el parametro.
+            Root<Personas> personas = cq.from(Personas.class); //creamos el select
+            ParameterExpression<Integer> p = cb.parameter(Integer.class);//creamos el objeto parametro de tipo entero
+//          q.select(c).where(cb.equal(c.get("population"), p));
+//            q.select(c).where(cb.equal(c.get(Personas_.rol), rol));
+            cq.where(cb.equal(personas.get(Personas_.rol), rol));
+
+            //Corremos la consulta en si
+            TypedQuery<Personas> query = em.createQuery(cq);
+//            query.setParameter(p, rol);
+            List<Personas> resultList = query.getResultList();
+            return resultList;
+
+        } catch (Exception e) {
+            System.out.println("PROBLEMAS CON LA CONSULTA findPersonasEntitiesByRol");
+            e.printStackTrace();
+
+            return null;
+        } finally {
+            em.close();
+        }
+
+    }
+
     public Personas findPersonas(Integer id) {
         EntityManager em = getEntityManager();
         try {
@@ -418,5 +459,4 @@ public class PersonasJpaController implements Serializable {
             em.close();
         }
     }
-    
 }
