@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: co.com.beanslab.cashretriver.recursos
+OpenIDE-Module-Localizing-Bundle: co/com/beanslab/cashretriver/recursos/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
