@@ -4,6 +4,7 @@
  */
 package co.com.beanslab.cashretriver.personal;
 
+import co.com.beanslab.cashretriver.modelo.Personas;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.io.IOException;
@@ -50,9 +51,15 @@ public class MySavable extends AbstractSavable implements Icon {
         if (NotifyDescriptor.YES_OPTION.equals(result)) {
             PersonalAdmin_Controller controller = new PersonalAdmin_Controller();
             controller.setTopComponent(tc);
-            controller.guardar();
+            
+            Personas persona = controller.guardar();
+            tc.getInstanceContent().add(persona);//agregamos a la persona en el lookup
+            
             tc.getInstanceContent().remove(this);
             unregister();
+            
+            //Recargamos el formulario de cobros para los comboboxes
+            
         }
     }
 

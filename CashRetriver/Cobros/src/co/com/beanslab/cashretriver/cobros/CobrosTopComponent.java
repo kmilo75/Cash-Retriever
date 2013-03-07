@@ -4,19 +4,12 @@
  */
 package co.com.beanslab.cashretriver.cobros;
 
-
 import co.com.beanslab.cashretriver.modelo.Personas;
-import co.com.beanslab.cashretriver.modelo.Roles;
-import co.com.beanslab.cashretriver.modelo.controllers.PersonasJpaController;
-
+import co.com.beanslab.cashretriver.personal.MySavable;
 import com.toedter.calendar.JDateChooserCellEditor;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -24,8 +17,12 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.Utilities;
 
 /**
  * Top component which displays something.
@@ -48,7 +45,10 @@ import org.openide.util.NbBundle.Messages;
     "CTL_CobrosTopComponent=Cobros Ventana",
     "HINT_CobrosTopComponent=Esta es la ventada de cobros"
 })
-public final class CobrosTopComponent extends TopComponent {
+public final class CobrosTopComponent extends TopComponent implements LookupListener {
+
+    Cobros_Controller cc;
+    Lookup.Result<Personas> lookupResult;
 
     public CobrosTopComponent() {
         initComponents();
@@ -57,7 +57,11 @@ public final class CobrosTopComponent extends TopComponent {
         AutoCompleteDecorator.decorate(cliente_jComboBox);
         AutoCompleteDecorator.decorate(cobrador_jComboBox);
         configurarTabla();
-        cargarDatos();
+        cc = new Cobros_Controller(this);
+        cc.cargarDatos();//se recarga la información del formulario
+
+
+
 
     }
 
@@ -470,12 +474,16 @@ public final class CobrosTopComponent extends TopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+        lookupResult = Utilities.actionsGlobalContext().lookupResult(Personas.class);
+        lookupResult.addLookupListener(this);
+        resultChanged(new LookupEvent(lookupResult));
+
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        lookupResult.removeLookupListener(this);
+        lookupResult = null;
     }
 
     void writeProperties(java.util.Properties p) {
@@ -496,30 +504,106 @@ public final class CobrosTopComponent extends TopComponent {
         abonos_jXTable.setHighlighters(HighlighterFactory.createSimpleStriping());
         TableColumn columnaFecha = abonos_jXTable.getColumnModel().getColumn(0);
         columnaFecha.setCellEditor(new JDateChooserCellEditor());
-       
-       
+
+
     }
 
-    private void cargarDatos() {
-   
-       cargarPersonas(new Roles(2), cobrador_jComboBox );
-       cargarPersonas(new Roles(3), cliente_jComboBox);
+    public javax.swing.JScrollPane getAbonos_jScrollPane() {
+        return abonos_jScrollPane;
     }
 
-       /**
-     * Método que llena los comboBoxes de personas identificandolas con el rol correspondiente.
-     * si rol =1 administrador, 2=cobrador, 3 cliente
-     * @param rol Rol que se desea buscar.
-     * @param combo Combo que se quiere llenar
-     */
-    private void cargarPersonas(Roles rol, JComboBox<Personas> combo) {
-        EntityManagerFactory emf=Persistence.createEntityManagerFactory("ModeloPU");
-        PersonasJpaController clienteController =new PersonasJpaController(emf);
-        List<Personas> personas = clienteController.findPersonasEntitiesByRol(rol);
-        combo.setModel(new DefaultComboBoxModel((Vector<Personas>) personas));
+    public org.jdesktop.swingx.JXTable getAbonos_jXTable() {
+        return abonos_jXTable;
     }
 
-  
-    
-    
+    public javax.swing.JTextField getBaseMonto_jTextField() {
+        return baseMonto_jTextField;
+    }
+
+    public javax.swing.JComboBox getCliente_jComboBox() {
+        return cliente_jComboBox;
+    }
+
+    public javax.swing.JComboBox getCobrador_jComboBox() {
+        return cobrador_jComboBox;
+    }
+
+    public com.toedter.calendar.JDateChooser getFechaAbono_jDateChooser() {
+        return fechaAbono_jDateChooser;
+    }
+
+    public com.toedter.calendar.JDateChooser getFechaCredito_jDateChooser() {
+        return fechaCredito_jDateChooser;
+    }
+
+    public javax.swing.JComboBox getFrecuenciaInteres_jComboBox() {
+        return frecuenciaInteres_jComboBox;
+    }
+
+    public javax.swing.JTextField getInteresPorcentual_jTextField() {
+        return interesPorcentual_jTextField;
+    }
+
+    public javax.swing.JTextField getjTextField1() {
+        return jTextField1;
+    }
+
+    public javax.swing.JTextField getjTextField2() {
+        return jTextField2;
+    }
+
+    public javax.swing.JTextField getjTextField3() {
+        return jTextField3;
+    }
+
+    public javax.swing.JTextPane getjTextPane1() {
+        return jTextPane1;
+    }
+
+    public org.jdesktop.swingx.JXList getjXList1() {
+        return jXList1;
+    }
+
+    public javax.swing.JTextField getPrestamoMonto_jTextField() {
+        return prestamoMonto_jTextField;
+    }
+
+    public javax.swing.JTextField getTotalPrestamo_jTextField() {
+        return totalPrestamo_jTextField;
+    }
+
+    @Override
+    public void resultChanged(LookupEvent le) {
+//        DefaultComboBoxModel<Personas> clientes = new DefaultComboBoxModel<Personas>();
+//        DefaultComboBoxModel<Personas> cobradores = new DefaultComboBoxModel<Personas>();
+//
+//        Lookup.Result<Personas> r = (Lookup.Result) le.getSource();
+//        Collection<Personas> coll = (Collection<Personas>) r.allInstances();
+//        if (!coll.isEmpty()) {
+//            //llenamos los combos con la información de todas las personas en el lookup
+//            for (Personas persona : coll) {
+//                if (persona.getRol().getIdroles() == 2) {
+//                    clientes.addElement(persona);
+//                }
+//                if (persona.getRol().getIdroles() == 1) {
+//                    cobradores.addElement(persona);
+//                }
+//            }
+//        } else {
+//        }
+
+        Lookup.Result<Personas> r = (Lookup.Result) le.getSource();
+        Collection<? extends Personas> allInstances = r.allInstances();
+        if (!allInstances.isEmpty()) {
+//            JOptionPane.showMessageDialog(prestamo_jPanel, "Se escuchó el objeto savable");
+            cc.cargarDatos();
+            //Luego de grabar la información no necesitamos más ea persona en el lookup
+            for (Personas personas : allInstances) {
+                
+            }
+            
+        }
+
+
+    }
 }

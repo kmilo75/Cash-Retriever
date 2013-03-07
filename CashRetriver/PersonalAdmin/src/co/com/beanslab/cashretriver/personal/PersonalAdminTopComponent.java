@@ -6,30 +6,24 @@ package co.com.beanslab.cashretriver.personal;
 
 import co.com.beanslab.cashretriver.modelo.Barrios;
 import co.com.beanslab.cashretriver.modelo.Municipios;
+import co.com.beanslab.cashretriver.modelo.Personas;
 import co.com.beanslab.cashretriver.modelo.Roles;
 import co.com.beanslab.cashretriver.modelo.controllers.BarriosJpaController;
 import co.com.beanslab.cashretriver.modelo.controllers.MunicipiosJpaController;
 import co.com.beanslab.cashretriver.modelo.controllers.RolesJpaController;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
-import org.netbeans.spi.actions.AbstractSavable;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
-import org.openide.NotifyDescriptor.Confirmation;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.UndoRedo;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 
 /**
@@ -56,16 +50,23 @@ import org.openide.util.lookup.InstanceContent;
 public final class PersonalAdminTopComponent extends TopComponent {
 
     private UndoRedo.Manager manager = new UndoRedo.Manager();
-    private InstanceContent instanceContent;
+    private InstanceContent content;
+//    Lookup mochila;
+   
 
     public PersonalAdminTopComponent() {
-        this.instanceContent = new InstanceContent();
+        this.content = new InstanceContent();
+        
         initComponents();
         setName(Bundle.CTL_PersonalAdminTopComponent());
         setToolTipText(Bundle.HINT_PersonalAdminTopComponent());
         undoRedo();
         iniciarDatos();
         autocompletado();
+                
+        associateLookup(new AbstractLookup(content));
+//        mochila=new AbstractLookup(content);
+       
 
 
     }
@@ -283,7 +284,7 @@ public final class PersonalAdminTopComponent extends TopComponent {
 
     @Override
     public void componentOpened() {
-        // TODO add custom code on component opening
+             
     }
 
     @Override
@@ -396,7 +397,8 @@ public final class PersonalAdminTopComponent extends TopComponent {
         if (getLookup().lookup(MySavable.class)==null) {
             MySavable ms=new MySavable();
             ms.setTc(this);
-            instanceContent.add(ms);
+            content.add(ms);
+                        
         }
     }
 
@@ -405,7 +407,7 @@ public final class PersonalAdminTopComponent extends TopComponent {
     }
 
     public InstanceContent getInstanceContent() {
-        return instanceContent;
+        return content;
     }
 
     

@@ -37,11 +37,12 @@ public class PersonalAdmin_Controller {
      * Metodo que comprueba y valida las reglas de negocio de
      * PersonalAdmin_Controller.
      */
-    public void guardar() {
+    public Personas guardar() {
+        Personas p = new Personas();
         if (compruebaCampos(topComponent)) {
 
             //Recojemos la info del formulario y creamos el objeto personas.
-            Personas p = new Personas();
+
             p.setIdpersonas(null);//Se hace la prueba para ver si es necesario insertarle un numero
             p.setNombre(topComponent.getNombre_jTextField().getText());
             p.setApellido(topComponent.getApellido_jTextField().getText());
@@ -60,21 +61,23 @@ public class PersonalAdmin_Controller {
                 NotifyDescriptor.Message mensaje = new NotifyDescriptor.Message("Persona grabada exitósamente.");
 //                mensaje.setTitle("Error guardando la persona");
                 mensaje.setMessageType(NotifyDescriptor.INFORMATION_MESSAGE);
-                DialogDisplayer.getDefault().notify(mensaje);
+                //DialogDisplayer.getDefault().notify(mensaje);
 
                 //Actualizamos la lista de personas en el lookup
 
                 //Limpiamos el formulario
                 limpiarCampos();
 
+
             } catch (Exception e) {
                 NotifyDescriptor.Message mensaje = new NotifyDescriptor.Message("Hubo problemas con la grabación de la persona");
                 mensaje.setTitle("Error guardando la persona");
                 mensaje.setMessageType(NotifyDescriptor.ERROR_MESSAGE);
                 DialogDisplayer.getDefault().notify(mensaje);
+                return null;
             }
         }
-
+        return p;
 
     }
 
