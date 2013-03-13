@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.beanslab.cashretriver.creditos.creditosexplorer;
 
 import org.openide.nodes.AbstractNode;
@@ -13,17 +9,15 @@ import org.openide.nodes.Children;
  */
 public class CreditoAbstractRoot<T> extends AbstractNode{
 
-    
-    
     public CreditoAbstractRoot() {
         super (Children.create(new CreditoChildFactory<T>(), true));
-        setDisplayName ("Cobros");
+        setDisplayName ("Creditos y cobros");
         setIconBaseWithExtension("co/com/beanslab/cashretriver/cobros/cobro16x16.png");
     }
 
     CreditoAbstractRoot(Children create) {
         super(create);
-        setDisplayName("Cobros");
+        setDisplayName("Creditos y Cobros");
         setIconBaseWithExtension("co/com/beanslab/cashretriver/cobros/cobro16x16.png");
     }
 

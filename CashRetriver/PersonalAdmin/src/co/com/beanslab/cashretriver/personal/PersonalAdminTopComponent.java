@@ -11,20 +11,27 @@ import co.com.beanslab.cashretriver.modelo.Roles;
 import co.com.beanslab.cashretriver.modelo.controllers.BarriosJpaController;
 import co.com.beanslab.cashretriver.modelo.controllers.MunicipiosJpaController;
 import co.com.beanslab.cashretriver.modelo.controllers.RolesJpaController;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.UndoRedo;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 import org.openide.windows.TopComponent;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.Utilities;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.WindowManager;
 
 /**
  * Top component which displays something.
@@ -47,26 +54,32 @@ import org.openide.util.lookup.InstanceContent;
     "CTL_PersonalAdminTopComponent=PersonalAdmin Window",
     "HINT_PersonalAdminTopComponent=This is a PersonalAdmin window"
 })
-public final class PersonalAdminTopComponent extends TopComponent {
+public final class PersonalAdminTopComponent extends TopComponent implements LookupListener {
 
     private UndoRedo.Manager manager = new UndoRedo.Manager();
     private InstanceContent content;
+    private PersonalAdmin_Controller controller=new PersonalAdmin_Controller();
+
+    public PersonalAdmin_Controller getController() {
+        return controller;
+    }
+    
 //    Lookup mochila;
-   
+    private Lookup.Result<Personas> result = null;
 
     public PersonalAdminTopComponent() {
         this.content = new InstanceContent();
-        
+
         initComponents();
         setName(Bundle.CTL_PersonalAdminTopComponent());
         setToolTipText(Bundle.HINT_PersonalAdminTopComponent());
         undoRedo();
         iniciarDatos();
         autocompletado();
-                
+
         associateLookup(new AbstractLookup(content));
 //        mochila=new AbstractLookup(content);
-       
+
 
 
     }
@@ -98,8 +111,8 @@ public final class PersonalAdminTopComponent extends TopComponent {
         direccion_jTextField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         barrio_jComboBox = new javax.swing.JComboBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        barrioAgregar_jButton = new javax.swing.JButton();
+        barrioBorrar_jButton = new javax.swing.JButton();
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel8, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel8.text")); // NOI18N
 
@@ -113,6 +126,16 @@ public final class PersonalAdminTopComponent extends TopComponent {
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel1.text")); // NOI18N
 
         rol_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rol_jComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rol_jComboBoxItemStateChanged(evt);
+            }
+        });
+        rol_jComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rol_jComboBoxActionPerformed(evt);
+            }
+        });
 
         nombre_jTextField.setText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.nombre_jTextField.text")); // NOI18N
         nombre_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -129,36 +152,71 @@ public final class PersonalAdminTopComponent extends TopComponent {
                 apellido_jTextFieldActionPerformed(evt);
             }
         });
+        apellido_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                apellido_jTextFieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel9, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel9.text")); // NOI18N
 
         cedula_jTextField.setText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.cedula_jTextField.text")); // NOI18N
         cedula_jTextField.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.cedula_jTextField.toolTipText")); // NOI18N
+        cedula_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                cedula_jTextFieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel3.text")); // NOI18N
 
         telefono_jTextField.setText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.telefono_jTextField.text")); // NOI18N
+        telefono_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                telefono_jTextFieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel5, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel5.text")); // NOI18N
 
         celular_jTextField.setText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.celular_jTextField.text")); // NOI18N
         celular_jTextField.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.celular_jTextField.toolTipText")); // NOI18N
+        celular_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                celular_jTextFieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel4.text")); // NOI18N
 
         direccion_jTextField.setText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.direccion_jTextField.text")); // NOI18N
+        direccion_jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                direccion_jTextFieldKeyReleased(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jLabel6.text")); // NOI18N
 
         barrio_jComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        barrio_jComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                barrio_jComboBoxItemStateChanged(evt);
+            }
+        });
+        barrio_jComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                barrio_jComboBoxActionPerformed(evt);
+            }
+        });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/co/com/beanslab/cashretriver/personal/plus_16x16.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jButton1.text")); // NOI18N
-        jButton1.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jButton1.toolTipText")); // NOI18N
+        barrioAgregar_jButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/co/com/beanslab/cashretriver/personal/plus_16x16.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(barrioAgregar_jButton, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.barrioAgregar_jButton.text")); // NOI18N
+        barrioAgregar_jButton.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.barrioAgregar_jButton.toolTipText")); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/co/com/beanslab/cashretriver/personal/delete_16x16.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jButton2.text")); // NOI18N
-        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.jButton2.toolTipText")); // NOI18N
+        barrioBorrar_jButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/co/com/beanslab/cashretriver/personal/delete_16x16.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(barrioBorrar_jButton, org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.barrioBorrar_jButton.text")); // NOI18N
+        barrioBorrar_jButton.setToolTipText(org.openide.util.NbBundle.getMessage(PersonalAdminTopComponent.class, "PersonalAdminTopComponent.barrioBorrar_jButton.toolTipText")); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -186,9 +244,9 @@ public final class PersonalAdminTopComponent extends TopComponent {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(barrio_jComboBox, 0, 416, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(barrioAgregar_jButton)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2))
+                        .addComponent(barrioBorrar_jButton))
                     .addComponent(cedula_jTextField))
                 .addGap(10, 10, 10))
         );
@@ -227,8 +285,8 @@ public final class PersonalAdminTopComponent extends TopComponent {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(barrio_jComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(barrioAgregar_jButton)
+                    .addComponent(barrioBorrar_jButton))
                 .addContainerGap(153, Short.MAX_VALUE))
         );
 
@@ -251,21 +309,57 @@ public final class PersonalAdminTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nombre_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombre_jTextFieldKeyReleased
-       modify();
+        modify();
     }//GEN-LAST:event_nombre_jTextFieldKeyReleased
 
     private void apellido_jTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apellido_jTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_apellido_jTextFieldActionPerformed
 
+    private void apellido_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apellido_jTextFieldKeyReleased
+       modify();
+    }//GEN-LAST:event_apellido_jTextFieldKeyReleased
+
+    private void cedula_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cedula_jTextFieldKeyReleased
+       modify();
+    }//GEN-LAST:event_cedula_jTextFieldKeyReleased
+
+    private void telefono_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_telefono_jTextFieldKeyReleased
+       modify();
+    }//GEN-LAST:event_telefono_jTextFieldKeyReleased
+
+    private void celular_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_celular_jTextFieldKeyReleased
+       modify();
+    }//GEN-LAST:event_celular_jTextFieldKeyReleased
+
+    private void direccion_jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_direccion_jTextFieldKeyReleased
+       modify();
+    }//GEN-LAST:event_direccion_jTextFieldKeyReleased
+
+    private void barrio_jComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_barrio_jComboBoxItemStateChanged
+    
+    }//GEN-LAST:event_barrio_jComboBoxItemStateChanged
+
+    private void rol_jComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rol_jComboBoxItemStateChanged
+      
+    }//GEN-LAST:event_rol_jComboBoxItemStateChanged
+
+    private void rol_jComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rol_jComboBoxActionPerformed
+      
+    }//GEN-LAST:event_rol_jComboBoxActionPerformed
+
+    private void barrio_jComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barrio_jComboBoxActionPerformed
+    
+    }//GEN-LAST:event_barrio_jComboBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField apellido_jTextField;
+    private javax.swing.JButton barrioAgregar_jButton;
+    private javax.swing.JButton barrioBorrar_jButton;
     private javax.swing.JComboBox barrio_jComboBox;
     private javax.swing.JTextField cedula_jTextField;
     private javax.swing.JTextField celular_jTextField;
     private javax.swing.JTextField direccion_jTextField;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -284,12 +378,16 @@ public final class PersonalAdminTopComponent extends TopComponent {
 
     @Override
     public void componentOpened() {
-             
+//        result = Utilities.actionsGlobalContext().lookupResult(Personas.class);
+        result = WindowManager.getDefault().findTopComponent("PersonalExplorerTopComponent").getLookup().lookupResult(Personas.class);
+        result.addLookupListener(this);
+        resultChanged(new LookupEvent(result));
     }
 
     @Override
     public void componentClosed() {
-        // TODO add custom code on component closing
+        result.removeLookupListener(this);
+        result = null;
     }
 
     void writeProperties(java.util.Properties p) {
@@ -353,7 +451,7 @@ public final class PersonalAdminTopComponent extends TopComponent {
         telefono_jTextField.getDocument().addUndoableEditListener(manager);
         celular_jTextField.getDocument().addUndoableEditListener(manager);
         direccion_jTextField.getDocument().addUndoableEditListener(manager);
-        
+
         //Queda pendiente cómo se agrega el undo para los comboboxes
     }
 
@@ -361,44 +459,42 @@ public final class PersonalAdminTopComponent extends TopComponent {
     public javax.swing.JTextField getApellido_jTextField() {
         return apellido_jTextField;
     }
-    
+
     public javax.swing.JComboBox getBarrio_jComboBox() {
         return barrio_jComboBox;
     }
-    
+
     public javax.swing.JTextField getCelular_jTextField() {
         return celular_jTextField;
     }
-    
+
     public javax.swing.JTextField getDireccion_jTextField() {
         return direccion_jTextField;
     }
-    
+
     public javax.swing.JComboBox getMunicipio_jComboBox() {
         return municipio_jComboBox;
     }
-    
+
     public javax.swing.JTextField getNombre_jTextField() {
         return nombre_jTextField;
     }
-    
+
     public javax.swing.JComboBox getRol_jComboBox() {
         return rol_jComboBox;
     }
-    
+
     public javax.swing.JTextField getTelefono_jTextField() {
         return telefono_jTextField;
     }
-    
-    
-    //</editor-fold>
 
+    //</editor-fold>
     private void modify() {
-        if (getLookup().lookup(MySavable.class)==null) {
-            MySavable ms=new MySavable();
+        if (getLookup().lookup(MySavable.class) == null) {
+            MySavable ms = new MySavable();
             ms.setTc(this);
             content.add(ms);
-                        
+
         }
     }
 
@@ -410,7 +506,46 @@ public final class PersonalAdminTopComponent extends TopComponent {
         return content;
     }
 
-    
-    
+    @Override
+    public void resultChanged(LookupEvent le) {
+        Lookup.Result<Personas> r = (Lookup.Result<Personas>) le.getSource();
+        Collection<Personas> coll = (Collection<Personas>) r.allInstances();
+        if (!coll.isEmpty()) {
+            for (Personas persona : coll) {
+
+                rol_jComboBox.setSelectedItem(persona.getRol());
+                nombre_jTextField.setText(persona.getNombre());
+                apellido_jTextField.setText(persona.getApellido());
+                direccion_jTextField.setText(persona.getDireccion());
+                telefono_jTextField.setText(persona.getTelefono1());
+                celular_jTextField.setText(persona.getTelelfono2());
+                cedula_jTextField.setText(persona.getNit());
+                barrio_jComboBox.setSelectedItem(persona.getBarrio());
+            }
+
+        } else {
+            //me llena con los datos por defecto
+            String s = "";
+            rol_jComboBox.setSelectedIndex(0);
+            nombre_jTextField.setText(s);
+            apellido_jTextField.setText(s);
+            direccion_jTextField.setText(s);
+            telefono_jTextField.setText(s);
+            celular_jTextField.setText(s);
+            cedula_jTextField.setText(s);
+            barrio_jComboBox.setSelectedIndex(0);
+        }
+
+    }
+
+    public javax.swing.JButton getBarrioAgregar_jButton() {
+        return barrioAgregar_jButton;
+    }
+
+    public javax.swing.JButton getBarrioBorrar_jButton() {
+        return barrioBorrar_jButton;
+    }
+
+   
     
 }

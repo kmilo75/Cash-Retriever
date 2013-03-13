@@ -104,7 +104,7 @@ public class PersonalAdmin_Controller {
         this.topComponent = topComponent;
     }
 
-    public void limpiarCampos() {
+    public  void limpiarCampos() {
         topComponent.getNombre_jTextField().setText("");
         topComponent.getApellido_jTextField().setText("");
         topComponent.getTelefono_jTextField().setText("");
@@ -113,5 +113,19 @@ public class PersonalAdmin_Controller {
         topComponent.getBarrio_jComboBox().setSelectedIndex(0);
         topComponent.getRol_jComboBox().setSelectedIndex(2);
         topComponent.getCedula_jTextField().setText("");
+        
+    }
+
+    public  void activarCampos(boolean habilitado) {
+        topComponent.getNombre_jTextField().setEditable(habilitado);
+        topComponent.getApellido_jTextField().setEditable(habilitado);
+        topComponent.getTelefono_jTextField().setEditable(habilitado);
+        topComponent.getCelular_jTextField().setEditable(habilitado);
+        topComponent.getDireccion_jTextField().setEditable(habilitado);
+        topComponent.getBarrio_jComboBox().setEnabled(habilitado);
+        topComponent.getRol_jComboBox().setEnabled(habilitado);
+        topComponent.getCedula_jTextField().setEditable(habilitado);
+        topComponent.getBarrioAgregar_jButton().setEnabled(habilitado);
+        topComponent.getBarrioBorrar_jButton().setEnabled(habilitado);
     }
 }
